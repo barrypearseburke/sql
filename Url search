@@ -2,8 +2,11 @@ SELECT
     LEFT(url, 
         CASE 
             WHEN CHARINDEX('?', url) > 0 THEN CHARINDEX('?', url) - 1
-            WHEN CHARINDEX('/', REVERSE(url) + '/') > 0 THEN LEN(url) - CHARINDEX('/', REVERSE(url) + '/') + 1
-            ELSE LEN(url)
+            ELSE 
+                CASE 
+                    WHEN PATINDEX('%/[0-9]%', REVERSE(url)) > 0 THEN LEN(url) - PATINDEX('%/[0-9]%', REVERSE(url)) + 2
+                    ELSE LEN(url)
+                END
         END) AS grouped_url,
     COUNT(*) AS url_count
 FROM your_table
@@ -11,6 +14,9 @@ GROUP BY
     LEFT(url, 
         CASE 
             WHEN CHARINDEX('?', url) > 0 THEN CHARINDEX('?', url) - 1
-            WHEN CHARINDEX('/', REVERSE(url) + '/') > 0 THEN LEN(url) - CHARINDEX('/', REVERSE(url) + '/') + 1
-            ELSE LEN(url)
+            ELSE 
+                CASE 
+                    WHEN PATINDEX('%/[0-9]%', REVERSE(url)) > 0 THEN LEN(url) - PATINDEX('%/[0-9]%', REVERSE(url)) + 2
+                    ELSE LEN(url)
+                END
         END);
