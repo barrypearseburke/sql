@@ -10,3 +10,12 @@ GROUP BY
         WHEN CHARINDEX('?', url) > 0 THEN LEFT(url, CHARINDEX('?', url) - 1)
         ELSE LEFT(url, LEN(url) - PATINDEX('%/[0-9]%', REVERSE(url) + '/') + 2)
     END;
+
+
+
+SELECT LEFT(url, 
+       INSTR(REVERSE(url), '/', 2) - 1) AS grouped_url,
+       COUNT(*) AS url_count
+FROM your_table_name
+GROUP BY LEFT(url, 
+          INSTR(REVERSE(url), '/', 2) - 1);
